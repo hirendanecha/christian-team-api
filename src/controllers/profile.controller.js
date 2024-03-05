@@ -73,8 +73,9 @@ exports.updateProfile = async function (req, res) {
         .json({ error: true, message: "Username is already exist" });
     }
 
-    if (req.body.Id) {
-      const updateUserData = {
+    if (req.body.Id === req.user.id) {
+      if (req.body.UserID) {
+        const updateUserData = {
         Username: reqBody?.Username,
         FirstName: reqBody?.FirstName,
         LastName: reqBody?.LastName,
@@ -85,7 +86,7 @@ exports.updateProfile = async function (req, res) {
         Country: reqBody?.Country,
       };
 
-      User.update(req.body.Id, updateUserData, (err, result) => {
+      User.update(req.body.UserID, updateUserData, (err, result) => {
         if (err) return utils.send500(res, err);
       });
     }
@@ -97,7 +98,10 @@ exports.updateProfile = async function (req, res) {
         message: "Profile update successfully",
       });
     });
+  }else {
+    return res.status(401).json({ message: "Unauthorized access" });
   }
+};
 };
 
 const getUsername = async function (username, exisingusername) {
