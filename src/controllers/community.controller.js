@@ -5,7 +5,8 @@ const { getPagination, getCount, getPaginationData } = require("../helpers/fn");
 
 // Admin Api //
 exports.findAllCommunity = async function (req, res) {
-  const { selectedCard, selectedCountry, selectedState, selectedAreas } = req.body;
+  const { selectedCard, selectedCountry, selectedState, selectedAreas } =
+    req.body;
   console.log(req.body);
   const searchData = await Community.findAllCommunity(
     selectedCard,
@@ -62,13 +63,13 @@ exports.createCommunity = async function (req, res) {
       if (err) {
         return utils.send500(res, err);
       } else {
-        if (community) {
-          const emphasisData = req.body.emphasis;
-          const areasData = req.body.areas;
-          const emphasis = await Community.addEmphasis(community, emphasisData);
-          const areas = await Community.addAreas(community, areasData);
-          console.log(emphasis, areas);
-        }
+        // if (community) {
+        //   const emphasisData = req.body.emphasis;
+        //   const areasData = req.body.areas;
+        //   const emphasis = await Community.addEmphasis(community, emphasisData);
+        //   const areas = await Community.addAreas(community, areasData);
+        //   console.log(emphasis, areas);
+        // }
         return res.json({
           error: false,
           message: "Your community will be approve by admin",
