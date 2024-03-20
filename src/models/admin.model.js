@@ -1,6 +1,7 @@
 "use strict";
 var db = require("../../config/db.config");
-require("../common/common")();
+const common = require("../common/common");
+
 
 var Admin = function () {};
 

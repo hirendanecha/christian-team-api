@@ -1,7 +1,7 @@
 "use strict";
 const jwt = require("jsonwebtoken");
 var db = require("../../config/db.config");
-require("../common/common")();
+const common = require("../common/common");
 const environment = require("../environments/environment");
 const { executeQuery } = require("../helpers/utils");
 
@@ -87,7 +87,15 @@ User.login = function (email, Id, result) {
             null
           );
         } else {
-          const token = await generateJwtToken(res[0]);
+          // const token = await generateJwtToken(res[0]);
+          const token = await common.generateJwtToken(
+            {
+              id: res[0].profileId,
+              username: res[0].Username,
+              active: res[0].IsActive,
+            },
+            "5d"
+          );
           const query =
             "select c.channelId from channelAdmins as c left join profile as p on p.ID = c.profileId where c.profileId = p.ID and p.UserID = ?;";
           const value = [Id];
@@ -289,7 +297,15 @@ User.adminLogin = function (email, result) {
         } else {
           console.log("Login Data");
           console.log(user);
-          const token = await generateJwtToken(res[0]);
+          // const token = await generateJwtToken(res[0]);
+          const token = await common.generateJwtToken(
+            {
+              id: res[0].profileId,
+              username: res[0].Username,
+              active: res[0].IsActive,
+            },
+            "5d"
+          );
           return result(null, {
             userId: user.Id,
             user: user,
@@ -432,12 +448,13 @@ User.verification = function (token, result) {
       return result(err, decodedToken);
     }
     try {
+      console.log(decoded);
       const updateQuery = await executeQuery(
         "UPDATE users SET IsActive ='Y' WHERE Id = ?",
-        [decoded.userId]
+        [decoded.user.userId]
       );
       const fetchUser = await executeQuery("select * from users where Id = ?", [
-        decoded.userId,
+        decoded.user.userId,
       ]);
       console.log("fetchUser", updateQuery, fetchUser);
       return result(null, fetchUser[0]);

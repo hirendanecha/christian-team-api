@@ -5,6 +5,7 @@ const utils = require("../helpers/utils");
 const environments = require("../environments/environment");
 const jwt = require("jsonwebtoken");
 const authorize = require("../middleware/authorize");
+const common = require("../common/common");
 
 const { getPagination, getCount, getPaginationData } = require("../helpers/fn");
 const { Encrypt } = require("../helpers/cryptography");
@@ -444,10 +445,19 @@ exports.verification = function (req, res) {
     //   return res.redirect(`${environments.ADMIN_URL}/auth/partner-login`);
     // }
 
-    const token = await generateJwtToken(data);
+    // const token = await common.generateJwtToken(data);
+    console.log(data);
+    const token = await common.generateJwtToken(
+      {
+        id: data.Id,
+        username: data.Username,
+        active: data.IsActive,
+      },
+      "5d"
+    );
     console.log(token);
     return res.redirect(
-      `${environments.FRONTEND_URL}/healing-registration?token=${token}`
+      `${environments.FRONTEND_URL}/christian-registration?token=${token}`
     );
   });
 };
