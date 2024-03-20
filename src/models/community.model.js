@@ -17,6 +17,8 @@ var Community = function (community) {
   this.Zip = community?.Zip;
   this.County = community?.County;
   this.address = community?.address;
+  this.Email = community?.Email;
+  this.MobileNo = community?.MobileNo;
 };
 
 Community.findAllCommunity = async function (
@@ -408,7 +410,6 @@ Community.getEmphasisAndArea = async function () {
   const area = await executeQuery(query1);
   return { emphasis, area };
 };
-
 
 Community.CreateAdvertizementLink = async function (communityLinkData, result) {
   console.log(communityLinkData);
