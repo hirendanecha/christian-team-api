@@ -304,7 +304,7 @@ User.adminLogin = function (email, result) {
               username: res[0].Username,
               active: res[0].IsActive,
             },
-            "5d"
+            "15d"
           );
           return result(null, {
             userId: user.Id,
