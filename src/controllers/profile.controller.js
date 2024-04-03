@@ -76,32 +76,32 @@ exports.updateProfile = async function (req, res) {
     if (req.body.Id === req.user.id) {
       if (req.body.UserID) {
         const updateUserData = {
-        Username: reqBody?.Username,
-        FirstName: reqBody?.FirstName,
-        LastName: reqBody?.LastName,
-        Address: reqBody?.Address,
-        Zip: reqBody?.Zip,
-        City: reqBody?.City,
-        State: reqBody?.State,
-        Country: reqBody?.Country,
-      };
+          Username: reqBody?.Username,
+          FirstName: reqBody?.FirstName,
+          LastName: reqBody?.LastName,
+          Address: reqBody?.Address,
+          Zip: reqBody?.Zip,
+          City: reqBody?.City,
+          State: reqBody?.State,
+          Country: reqBody?.Country,
+        };
 
-      User.update(req.body.UserID, updateUserData, (err, result) => {
+        User.update(req.body.UserID, updateUserData, (err, result) => {
+          if (err) return utils.send500(res, err);
+        });
+      }
+
+      Profile.update(profileId, profile, async function (err, profile) {
         if (err) return utils.send500(res, err);
+        return res.json({
+          error: false,
+          message: "Profile update successfully",
+        });
       });
+    } else {
+      return res.status(401).json({ message: "Unauthorized access" });
     }
-
-    Profile.update(profileId, profile, async function (err, profile) {
-      if (err) return utils.send500(res, err);
-      return res.json({
-        error: false,
-        message: "Profile update successfully",
-      });
-    });
-  }else {
-    return res.status(401).json({ message: "Unauthorized access" });
   }
-};
 };
 
 const getUsername = async function (username, exisingusername) {
@@ -132,12 +132,23 @@ exports.editNotifications = async function (req, res) {
 
 exports.getNotificationById = async function (req, res) {
   const { id } = req.params;
-  const data = await Profile.getNotificationById(id);
-  return res.send({
-    error: false,
-    data: data,
-  });
+  const { page, size } = req.body;
+  const { limit, offset } = getPagination(page, size);
+  const notificationData = await Profile.getNotificationById(id, limit, offset);
+
+  return res.send(
+    getPaginationData(
+      { count: notificationData.count, docs: notificationData.data },
+      page,
+      limit
+    )
+  );
+  // return res.send({
+  //   error: false,
+  //   data: data,
+  // });
 };
+
 exports.getNotification = async function (req, res) {
   const { id } = req.params;
   const data = await Profile.getNotification(id);
