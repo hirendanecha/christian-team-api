@@ -452,8 +452,7 @@ exports.verification = function (req, res) {
         id: data.Id,
         username: data.Username,
         active: data.IsActive,
-      },
-      "5d"
+      }
     );
     console.log(token);
     return res.redirect(

@@ -51,8 +51,7 @@ exports.registrationMail = async (userData, userId) => {
     {
       userId: userId,
       email: userData.Email,
-    },
-    "5d"
+    }
   );
 
   let registerUrl = `${environment.API_URL}customers/user/verification/${token}`;
@@ -80,13 +79,10 @@ exports.forgotPasswordMail = async (user) => {
     //   { expiresIn: "1d" }
     // );
 
-    const token = common.generateJwtToken(
-      {
-        userId: user?.Id,
-        email: user.Email,
-      },
-      "1d"
-    );
+    const token = common.generateJwtToken({
+      userId: user?.Id,
+      email: user.Email,
+    });
 
     let forgotPasswordUrl = `${environment.FRONTEND_URL}reset-password/user?accesstoken=${token}`;
     const mailObj = {
@@ -104,9 +100,15 @@ exports.forgotPasswordMail = async (user) => {
 };
 
 exports.notificationMail = async (userData) => {
-  let name = userData?.userName || userData.fileName;
-  let msg = `You were tagged in ${userData.senderUsername}'s ${userData.type}.`;
-  let redirectUrl = `${environment.FRONTEND_URL}post/${userData.postId}`;
+  let name = userData?.userName || userData.firstName;
+  let msg =
+    userData?.msg ||
+    `You were tagged in ${userData.senderUsername}'s ${userData.type}.`;
+  let redirectUrl = userData.postId
+    ? `${environment.FRONTEND_URL}post/${userData.postId}`
+    : userData?.type === "message"
+    ? `${environment.FRONTEND_URL}profile-chats`
+    : "";
 
   const mailObj = {
     email: userData.email,
@@ -168,7 +170,7 @@ exports.notificationMailOnInvite = async (userData) => {
   let name = userData?.userName || userData.firstName;
   let msg = userData.msg;
   let redirectUrl = `${environment.FRONTEND_URL}profile-chats`;
-  
+
   const mailObj = {
     email: userData.email,
     subject: "Christian notification",
