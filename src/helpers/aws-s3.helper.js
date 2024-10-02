@@ -4,7 +4,7 @@ require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 const s3 = new AWS.S3({
   accessKeyId: "XZ1L2U32Z7XMOW5S5ZBD",
   secretAccessKey: "2e3lYJoXmocA5W3mVSpaDQF4qrDbbUA3kuFOO2Pe",
-  endpoint: new AWS.Endpoint("s3.wasabisys.com"), // Wasabi endpoint
+  endpoint: new AWS.Endpoint("s3.us-east-2.wasabisys.com"), // Wasabi endpoint
   region: "us-east-2",
 });
 exports.uploadFileToWasabi = async (file, key) => {
