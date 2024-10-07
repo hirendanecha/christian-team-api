@@ -72,6 +72,10 @@ exports.readNotification = function (data) {
   return readNotification(data);
 };
 
+exports.suspendUser = function (data) {
+  return suspendUser(data);
+};
+
 const getPost = async function (params) {
   const { page, size, profileId, communityId } = params;
   const { limit, offset } = getPagination(page, size);
@@ -187,7 +191,7 @@ const createNewPost = async function (data) {
             notificationByProfileId: postData?.profileid,
             actionType: "T",
           });
-          const findUser = `select u.Email,p.FirstName,p.LastName,p.Username from users as u left join profile as p on p.UserID = u.Id where p.postNotificationEmail = 'Y' p.ID = ?`;
+          const findUser = `select u.Email,p.FirstName,p.LastName,p.Username from users as u left join profile as p on p.UserID = u.Id where p.postNotificationEmail = 'Y' and p.ID = ?`;
           const values = [tag?.id];
           const userData = await executeQuery(findUser, values);
           if (userData?.length) {
@@ -615,5 +619,16 @@ const getMetaD = async function (params) {
     return await ogPromise(url);
   } else {
     return null;
+  }
+};
+
+const suspendUser = async function (params) {
+  try {
+    const query = "UPDATE users SET IsSuspended = ? WHERE Id= ?";
+    const values = [params.isSuspended, params.id];
+    const user = await executeQuery(query, values);
+    return user;
+  } catch (error) {
+    return error;
   }
 };
