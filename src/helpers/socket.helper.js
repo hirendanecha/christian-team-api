@@ -265,10 +265,12 @@ socket.config = (server) => {
             actionType: params.actionType,
           });
           // notification - emit - to user
-          io.to(`${notification.notificationToProfileId}`).emit(
-            "notification",
-            notification
-          );
+          if (notification) {
+            io.to(`${notification?.notificationToProfileId}`).emit(
+              "notification",
+              notification
+            );
+          }
           // } else if (params.communityPostId) {
           //   const data = await socketService.likeFeedPost(params);
           //   socket.broadcast.emit("community-post", data);
@@ -1092,7 +1094,7 @@ socket.config = (server) => {
         cb(error);
       }
     });
-    
+
     socket.on("suspend-user", async (params, cb) => {
       logger.info("suspend-user", {
         ...params,
