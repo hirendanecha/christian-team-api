@@ -449,19 +449,10 @@ exports.verification = function (req, res) {
     // if (data.IsAdmin === "Y") {
     //   return res.redirect(`${environments.ADMIN_URL}/auth/partner-login`);
     // }
-
-    // const token = await common.generateJwtToken(data);
-    console.log(data);
-    const token = await common.generateJwtToken(
-      {
-        id: data.Id,
-        username: data.Username,
-        active: data.IsActive,
-      }
-    );
+    const token = await common.generateJwtToken(data);
     console.log(token);
     return res.redirect(
-      `${environments.FRONTEND_URL}/christian-registration?token=${token}`
+      `${environments.FRONTEND_URL}/conscience-registration?token=${token}`
     );
   });
 };
@@ -521,8 +512,19 @@ exports.verifyToken = async function (req, res) {
   try {
     const token = req.params.token;
     const decoded = jwt.verify(token, environments.JWT_SECRET_KEY);
+    console.log(decoded.user);
+
     if (decoded.user) {
-      res.status(200).send({ message: "Authorized User", verifiedToken: true });
+      const [profile] = await Profile.FindById(decoded.user.id);
+      if (profile?.IsSuspended === "Y") {
+        res
+          .status(401)
+          .send({ message: "user has been suspended", verifiedToken: false });
+      } else {
+        res
+          .status(200)
+          .send({ message: "Authorized User", verifiedToken: true });
+      }
     } else {
       res
         .status(401)

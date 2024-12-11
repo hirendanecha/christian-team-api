@@ -277,4 +277,13 @@ featuredChannels.removeFormChannel = function (profileId, channelId, result) {
   );
 };
 
+featuredChannels.createChannelApplication = async function (data) {
+  const query = "insert into channel_application set ?";
+  const values = data;
+  const application = await executeQuery(query, values);
+  if (application) {
+    return application;
+  }
+};
+
 module.exports = featuredChannels;

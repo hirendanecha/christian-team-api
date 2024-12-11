@@ -16,6 +16,8 @@ const dashboardRouter = require("./dashboard.routes");
 const featuredChannels = require("./featured-channels.routes");
 const advertizementRouter = require("./advertizment.routes");
 const messageRouter = require("./message.routes");
+const bugsAndReports = require("./bugs-reports.routes");
+const subscribeChannelRouter = require("./subscribeChannel.routes");
 
 router.use("/login", authRoutes);
 router.use("/customers", userRoutes);
@@ -33,5 +35,7 @@ router.use("/dashboard", dashboardRouter);
 router.use("/channels", featuredChannels);
 router.use("/advertizement", advertizementRouter);
 router.use("/messages", messageRouter);
+router.use("/bugs-reports", bugsAndReports);
+router.use("/subscribe", subscribeChannelRouter);
 
 module.exports = router;

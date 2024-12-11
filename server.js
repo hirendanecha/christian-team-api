@@ -9,21 +9,6 @@ const app = express();
 // const https = require("https"),
 (fs = require("fs")), (helmet = require("helmet"));
 
-var originsWhitelist = [
-  "https://dev.freedom.opash.in/",
-  "https://www.dev.freedom.opash.in/",
-  "http://localhost:4200/",
-  "*",
-];
-var corsOptions = {
-  // origin: function (origin, callback) {
-  //   var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
-  //   callback(null, isWhitelisted);
-  // },
-  // origin: originsWhitelist,
-  // credentials: true,
-  // methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH", "OPTIONS"],
-};
 app.use(
   cors({
     origin: true,
